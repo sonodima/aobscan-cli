@@ -77,6 +77,48 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
         builder.with_all_threads()
     }.build();
 
+    // Due to the differences between section matches and global matches, we
+    // need to handle them separately.
+    //
+    // `object_matches` contains tuples of the form (data_offset, section_offset).
+    // `global_matches` contains values of the form offset.
+    let mut object_matches = vec![];
+    let mut global_matches = vec![];
+
+    // Keep track of the scan's start time, so we can print the elapsed time.
+    let start = std::time::Instant::now();
+
+    let found = if let Some(section) = &args.section {
+        // If a section is specified, scan only that section.
+        // Note that this will fail if the section is not found or if the selected
+        // file is not a supported binary.
+        pattern.scan_object(
+            &data, section,
+            |data_offset, section_offset| {
+                // Push the match information to the object matches vector.
+                object_matches.push((data_offset, section_offset));
+
+                // If the `--first` flag is specified, stop searching
+                // after the first match is found.
+                !args.first
+            },
+        ).map_err(|e| {
+            format!("Failed to scan object file: {}", e)
+        })?
+    } else {
+        // If no section is specified, scan the whole file.
+        pattern.scan(&data, |offset| {
+            // Push the match offset to the global matches vector.
+            global_matches.push(offset);
+
+            // If the `--first` flag is specified, stop searching
+            // after the first match is found.
+            !args.first
+        })
+    };
+
+    // Obtain the number of milliseconds taken to scan the file.
+    let elapsed = start.elapsed().as_millis();
 
     Ok(())
 }

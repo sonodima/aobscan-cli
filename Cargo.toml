@@ -1,0 +1,20 @@
+[package]
+name = "aobscan-cli"
+version = "0.1.0"
+authors = ["sonodima"]
+edition = "2021"
+
+description = ""
+readme = "README.md"
+homepage = "https://github.com/sonodima/aobscan"
+repository = "https://github.com/sonodima/aobscan"
+license = "MIT"
+
+keywords = ["memory", "aob", "signature", "pattern", "scan"]
+categories = ["command-line-utilities", "algorithms"]
+
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+colored = "2.0"
+aobscan = "0.1.7"

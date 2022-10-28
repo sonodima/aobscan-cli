@@ -122,3 +122,22 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+/// Prints the results header, containing the number of matches found and
+/// the elapsed time.<br><br>
+///
+/// # Arguments
+/// * `raw_output` - Whether the output should be raw or with eye-candy.
+/// * `matches` - The number of matches found.
+/// * `elapsed` - The elapsed time in milliseconds.
+fn print_matches_header(raw_output: bool, matches: usize, elapsed: u128) {
+    if !raw_output {
+        println!(
+            "✅ {} {}",
+            format!("Matched {} location(s)", matches).green().bold(),
+            format!("in {}ms", elapsed).bright_black().bold()
+        );
+    } else {
+        println!("Matched {} location(s) in {}ms", matches, elapsed);
+    }
+}

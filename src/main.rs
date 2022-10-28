@@ -120,6 +120,59 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
     // Obtain the number of milliseconds taken to scan the file.
     let elapsed = start.elapsed().as_millis();
 
+    if found {
+        // Print a message indicating the number of matches found and the time
+        // taken to scan the file.
+        //
+        // In regards to the number of matches, we can sum the global and object matches
+        // vectors, since they are mutually exclusive.
+        // This allows us to avoid having to check if a section was specified or not.
+        print_matches_header(
+            args.raw_output,
+            global_matches.len() + object_matches.len(),
+            elapsed,
+        );
+
+        // If the scan is not single-threaded sort the matches by their offset in the file.
+        // This is done because the matches are returned in the order they are found,
+        // by each thread.
+        //
+        // Note: This has one flaw: if the executing CPU is single-threaded, the matches
+        // are not sorted. One way to fix this would be to expose the number of threads
+        // in the `aobscan::Pattern` structure, but at the moment I don't think
+        // the demand is high enough to justify it.
+        if args.threads != Some(1) {
+            if args.section.is_none() {
+                global_matches.sort();
+            } else {
+                // In the case of object matches, sort by the data offset.
+                // In reality, this doesn't matter and we could just as well sort by
+                // section offset since the results are always in the same object section.
+                object_matches.sort_by_key(|(data_offset, _)| *data_offset);
+            }
+        }
+
+        // Print all the matches, using the appropriate output format.
+        if let Some(section) = &args.section {
+            // If a section is specified, the scan was performed on a specific section,
+            // so we need to print the matches in the context of that section.
+            //
+            // This output format corresponds to the hexadecimal file offset and the
+            // section offset [section_name+offset].
+            print_object_matches(args.raw_output, section, &object_matches);
+        } else {
+            // If no section is specified, the scan was performed on the whole file,
+            // so we print the global matches.
+            //
+            // This output format corresponds to a single hexadecimal file offset
+            // per result.
+            print_global_matches(args.raw_output, &global_matches);
+        }
+    } else {
+        // Print a warning message if no matches were found.
+        print_no_matches(args.raw_output);
+    }
+
     Ok(())
 }
 

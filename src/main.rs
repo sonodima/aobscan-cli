@@ -52,6 +52,31 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
     }.map_err(|e| {
         format!("Failed to parse pattern: {}", e)
     })?;
-    
+
+    // Build the pattern from the builder with the given number of threads.
+    let pattern = if let Some(threads) = args.threads {
+        if threads != 0 {
+            // If the specified number of threads is different from 0,
+            // use that to scan the file.
+            //
+            // Note: This may fail if the number of threads is greater than the
+            // number of available cores.
+            // This is left to the user to handle.
+            builder.with_threads(threads)
+                .map_err(|e| {
+                    format!("Failed to set number of threads: {}", e)
+                })?
+        } else {
+            // If the specified number of threads is 0, use all the available cores.
+            // (maximum parallelism)
+            builder.with_all_threads()
+        }
+    } else {
+        // If the number of threads is not specified, use all the available cores.
+        // (maximum parallelism)
+        builder.with_all_threads()
+    }.build();
+
+
     Ok(())
 }

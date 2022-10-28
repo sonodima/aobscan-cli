@@ -141,3 +141,50 @@ fn print_matches_header(raw_output: bool, matches: usize, elapsed: u128) {
         println!("Matched {} location(s) in {}ms", matches, elapsed);
     }
 }
+
+/// Unhappily prints that no matches were found.<br><br>
+///
+/// # Arguments
+/// * `raw_output` - Whether the output should be raw or with eye-candy.
+fn print_no_matches(raw_output: bool) {
+    if !raw_output {
+        println!("🙁 {}", "No matches found".yellow());
+    } else {
+        println!("No matches found");
+    }
+}
+
+/// Prints the results of a global scan.<br><br>
+///
+/// # Arguments
+/// * `raw_output` - Whether the output should be raw or with eye-candy.
+/// * `matches` - The slice containing the offsets of the matches.
+fn print_global_matches(raw_output: bool, matches: &[usize]) {
+    for offset in matches {
+        if !raw_output {
+            println!(" » {:#02X}", offset);
+        } else {
+            println!("{:#02X}", offset);
+        }
+    }
+}
+
+/// Prints the results of a section scan.<br><br>
+///
+/// # Arguments
+/// * `raw_output` - Whether the output should be raw or with eye-candy.
+/// * `section_name` - The name of the section that was scanned, used to print the section offset.
+/// * `matches` - The slice containing the tuples of the form (data_offset, section_offset).
+fn print_object_matches(raw_output: bool, section_name: &str, matches: &[(usize, usize)]) {
+    for offset in matches {
+        if !raw_output {
+            println!(
+                "{:#02X} {}",
+                offset.0,
+                format!("[{}+{:#02X}]", section_name, offset.1).bright_black()
+            );
+        } else {
+            println!("{:#02X} [{}+{:#02X}]", offset.0, section_name, offset.1);
+        }
+    }
+}

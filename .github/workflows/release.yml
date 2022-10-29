@@ -57,12 +57,19 @@ jobs:
         run: |
           mkdir -p artifacts
           
-          # On Windows, the executable ends with the [.exe] extension
-          if [[ $OS == "windows-latest" ]]; then
-            cp target/$TARGET/release/$BUILD_NAME.exe artifacts/$RELEASE_NAME-$TARGET.exe
-          else
-            cp target/$TARGET/release/$BUILD_NAME artifacts/$RELEASE_NAME-$TARGET
+          # On Windows, the executable ends with the [.exe] extension.
+          RELEASE_NAME_FULL=$RELEASE_NAME
+          if [[ $OS =~ ^windows.*$ ]]; then
+            BUILD_NAME=$BUILD_NAME.exe
+            RELEASE_NAME_FULL=$RELEASE_NAME.exe
           fi
+          
+          # We want the executable to be named [aobscan] instead of [aobscan-cli], as it
+          # is shorter to type in the command line.
+          mv target/$TARGET/release/$BUILD_NAME artifacts/$RELEASE_NAME_FULL
+          
+          # Package the executable into an archive named with the build target.
+          tar -czf artifacts/$RELEASE_NAME-$TARGET.tar.gz --remove-files artifacts/$RELEASE_NAME_FULL
 
       - name: Upload Release Artifacts
         uses: actions/upload-artifact@v3

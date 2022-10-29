@@ -233,11 +233,11 @@ fn print_object_matches(raw_output: bool, section_name: &str, results: &[aobscan
 
         if !raw_output {
             println!(
-                " » [{}{}{}] {:#02X}",
+                " » [{}{}{}] › {:#02X}",
                 archive_str.bright_purple(),
                 format!("{}+", section_name).bright_black(),
-                format!("{:#02X}", result.section_offset).bold(),
-                result.raw_offset
+                format!("{:#02X}", result.section_offset).bright_black().bold(),
+                result.raw_offset,
             );
         } else {
             println!(

@@ -69,7 +69,7 @@ jobs:
           mv target/$TARGET/release/$BUILD_NAME artifacts/$RELEASE_NAME_FULL
           
           # Package the executable into an archive named with the build target.
-          tar -czf artifacts/$RELEASE_NAME-$TARGET.tar.gz artifacts/$RELEASE_NAME_FULL
+          tar -czf artifacts/$RELEASE_NAME-$TARGET.tar.gz -C artifacts $RELEASE_NAME_FULL
 
           # Delete the executable from the artifacts folder, as it is no longer needed.
           rm artifacts/$RELEASE_NAME_FULL

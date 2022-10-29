@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://github.com/sonodima/aobscan-cli/releases/latest">
-    <img src="https://img.shields.io/github/v/release/sonodima/aobscan-cli?color=yellow&label=latest"/>
+    <img src="https://img.shields.io/github/v/release/sonodima/aobscan-cli?color=pink&label=latest"/>
   </a>
   <a href="https://github.com/sonodima/aobscan-cli/actions?workflow=CI">
     <img src="https://github.com/sonodima/aobscan-cli/workflows/CI/badge.svg"/>

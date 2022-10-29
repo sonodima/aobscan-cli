@@ -4,10 +4,10 @@ version = "0.1.0"
 authors = ["sonodima"]
 edition = "2021"
 
-description = ""
+description = "AOBscan CLI is a command-line utility for multi-threaded AOB memory scanning"
 readme = "README.md"
-homepage = "https://github.com/sonodima/aobscan"
-repository = "https://github.com/sonodima/aobscan"
+homepage = "https://github.com/sonodima/aobscan-cli"
+repository = "https://github.com/sonodima/aobscan-cli"
 license = "MIT"
 
 keywords = ["memory", "aob", "signature", "pattern", "scan"]

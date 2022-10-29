@@ -1,6 +1,6 @@
 [package]
 name = "aobscan-cli"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["sonodima"]
 edition = "2021"
 
@@ -17,4 +17,4 @@ categories = ["command-line-utilities", "algorithms"]
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
 colored = "2.0"
-aobscan = "0.1.7"
+aobscan = "0.2"

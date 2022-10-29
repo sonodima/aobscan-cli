@@ -26,6 +26,14 @@ pub(crate) struct Args {
     #[clap(short, long, default_value = None, verbatim_doc_comment)]
     pub(crate) threads: Option<usize>,
 
+    /// The optional object file section in which to search for the pattern
+    ///
+    /// Allows to restrict the search to a specific section of an executable file, resulting in faster scans.
+    /// If not specified, the pattern will be searched for in the entire file.
+    /// Specifying a section is only supported for executable files, and will fail otherwise.
+    #[clap(short, long, verbatim_doc_comment)]
+    pub(crate) section: Option<String>,
+
     /// Output raw text instead of the pretty-printed colored output with emojis
     #[clap(short, long)]
     pub(crate) raw_output: bool,
@@ -36,12 +44,4 @@ pub(crate) struct Args {
     /// This means that the search may not return the actual first match.
     #[clap(short = 'i', long, verbatim_doc_comment)]
     pub(crate) first: bool,
-
-    /// The optional object file section in which to search for the pattern
-    ///
-    /// Allows to restrict the search to a specific section of an executable file, resulting in faster scans.
-    /// If not specified, the pattern will be searched for in the entire file.
-    /// Specifying a section is only supported for executable files, and will fail otherwise.
-    #[clap(short, long, verbatim_doc_comment)]
-    pub(crate) section: Option<String>,
 }

@@ -94,9 +94,9 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
         // file is not a supported binary.
         pattern.scan_object(
             &data, section,
-            |data_offset, section_offset| {
+            |result| {
                 // Push the match information to the object matches vector.
-                object_matches.push((data_offset, section_offset));
+                object_matches.push(result);
 
                 // If the `--first` flag is specified, stop searching
                 // after the first match is found.
@@ -136,19 +136,13 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
         // If the scan is not single-threaded sort the matches by their offset in the file.
         // This is done because the matches are returned in the order they are found,
         // by each thread.
-        //
-        // Note: This has one flaw: if the executing CPU is single-threaded, the matches
-        // are not sorted. One way to fix this would be to expose the number of threads
-        // in the `aobscan::Pattern` structure, but at the moment I don't think
-        // the demand is high enough to justify it.
-        if args.threads != Some(1) {
+        if pattern.get_threads() != 1 {
             if args.section.is_none() {
                 global_matches.sort();
             } else {
-                // In the case of object matches, sort by the data offset.
-                // In reality, this doesn't matter and we could just as well sort by
-                // section offset since the results are always in the same object section.
-                object_matches.sort_by_key(|(data_offset, _)| *data_offset);
+                // In the case of object matches, sort by the raw file offset.
+                // This is done to avoid having matches from different archives mixed up.
+                object_matches.sort_by_key(|result| result.raw_offset);
             }
         }
 
@@ -157,8 +151,8 @@ fn run(args: &Args) -> Result<(), Box<dyn std::error::Error>> {
             // If a section is specified, the scan was performed on a specific section,
             // so we need to print the matches in the context of that section.
             //
-            // This output format corresponds to the hexadecimal file offset and the
-            // section offset [section_name+offset].
+            // This output format corresponds to the archive id, section name, section offset,
+            // and the raw file offset.
             print_object_matches(args.raw_output, section, &object_matches);
         } else {
             // If no section is specified, the scan was performed on the whole file,
@@ -227,17 +221,32 @@ fn print_global_matches(raw_output: bool, matches: &[usize]) {
 /// # Arguments
 /// * `raw_output` - Whether the output should be raw or with eye-candy.
 /// * `section_name` - The name of the section that was scanned, used to print the section offset.
-/// * `matches` - The slice containing the tuples of the form (data_offset, section_offset).
-fn print_object_matches(raw_output: bool, section_name: &str, matches: &[(usize, usize)]) {
-    for offset in matches {
+/// * `results` - The slice containing the object scan results.
+fn print_object_matches(raw_output: bool, section_name: &str, results: &[aobscan::SectionResult]) {
+    for result in results {
+        let archive_str = result.archive_id
+            .as_ref()
+            .map_or_else(
+                || "".to_string(),
+                |id| format!("{} ", id),
+            );
+
         if !raw_output {
             println!(
-                "{:#02X} {}",
-                offset.0,
-                format!("[{}+{:#02X}]", section_name, offset.1).bright_black()
+                " » [{}{}{}] {:#02X}",
+                archive_str.bright_purple(),
+                format!("{}+", section_name).bright_black(),
+                format!("{:#02X}", result.section_offset).bold(),
+                result.raw_offset
             );
         } else {
-            println!("{:#02X} [{}+{:#02X}]", offset.0, section_name, offset.1);
+            println!(
+                "[{}{}+{:#02X}] {:#02X}",
+                archive_str,
+                section_name,
+                result.section_offset,
+                result.raw_offset
+            );
         }
     }
 }

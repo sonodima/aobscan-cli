@@ -24,6 +24,22 @@
 - Scan for pattern in an object file section _(by name)_
 - FAT Mach-O binaries support
 
+## Usage
+
+- Scan for an IDA-style pattern in a file
+
+```sh
+aobscan -f "file" -- "48 8b ? ? ? ? ? 48 8c"
+```
+
+- Scan for the first match of a raw hexadecimal string in the `__text` section of a file
+
+```sh
+aobscan -f "binary" -s "__text" -i -- "488b??????00"
+```
+
+See `aobscan --help` for more available arguments and their descriptions.
+
 ## Installation
 
 ### 🍺 Homebrew (macOS/Linux)

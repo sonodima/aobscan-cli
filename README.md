@@ -48,7 +48,7 @@ The easiest way to install **AOBscan CLI** is via [Homebrew](https://brew.sh/),
 via the [AOBscan](https://github.com/sonodima/homebrew-aobscan) Homebrew tap:
 
 ```sh
-brew tap sonodima/aobscan
+brew tap sonodima/sonodima
 brew install aobscan
 ```
 

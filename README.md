@@ -26,7 +26,9 @@
 
 ## Usage
 
-![Sample GIF](./media/usage.gif)
+<p align="center">
+  <img src="./media/usage.gif" alt="Sample GIF" />
+</p>
 
 - Scan for an IDA-style pattern in a file
 

@@ -26,6 +26,8 @@
 
 ## Usage
 
+![Sample GIF](./media/usage.gif)
+
 - Scan for an IDA-style pattern in a file
 
 ```sh

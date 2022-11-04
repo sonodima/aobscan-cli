@@ -49,7 +49,7 @@ See `aobscan --help` for more available arguments and their descriptions.
 ### 🍺 Homebrew (macOS/Linux)
 
 The easiest way to install **AOBscan CLI** is via [Homebrew](https://brew.sh/),
-via the [AOBscan](https://github.com/sonodima/homebrew-aobscan) Homebrew tap:
+using [my TAP:](https://github.com/sonodima/homebrew-sonodima)
 
 ```sh
 brew tap sonodima/sonodima

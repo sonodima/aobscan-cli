@@ -38,7 +38,7 @@ pub(crate) struct Args {
     #[clap(short, long)]
     pub(crate) raw_output: bool,
 
-    /// Whether to stop searching after the first match is found
+    /// Stop the scan after the first match is found
     ///
     /// Note: If run with multiple threads, the first match found by any thread is returned.
     /// This means that the search may not return the actual first match.

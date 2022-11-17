@@ -1,3 +1,4 @@
+use aobscan::ObjectScan;
 use clap::Parser;
 use colored::Colorize;
 

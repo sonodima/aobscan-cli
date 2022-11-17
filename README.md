@@ -39,10 +39,10 @@ aobscan -f "file" -- "48 8b ? ? ? ? ? 48 8c"
 - Scan for the first match of a raw hexadecimal string in the `__text` section of a file
 
 ```sh
-aobscan -f "binary" -s "__text" -i -- "488b??????00"
+aobscan -f "file" -s "__text" -i -- "488b??????00"
 ```
 
-See `aobscan --help` for more available arguments and their descriptions.
+See `aobscan --help` for all the available arguments and their descriptions.
 
 ## Installation
 

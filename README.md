@@ -19,7 +19,7 @@
 
 - User-friendly CLI interface
 - Single-threaded and multi-threaded file scanning
-- IDA-style patterns: `48 8b ? ? ? 48 8c ?? ?? ?? ??`
+- IDA-style patterns: `48 8b ? ? ? 48 8c`
 - Raw hexadecimal strings: `488b??????00`
 - Scan for pattern in an object file section _(by name)_
 - FAT Mach-O binaries support
@@ -45,6 +45,16 @@ aobscan -f "file" -s "__text" -i -- "488b??????00"
 See `aobscan --help` for all the available arguments and their descriptions.
 
 ## Installation
+
+### 🦀 Cargo (Windows/macOS/Linux)
+
+Who doesn't love Cargo? You can install **AOBscan CLI** with it, by running:
+
+```sh
+cargo install aobscan-cli
+```
+
+You can now launch the program with the `aobscan-cli` command.
 
 ### 🍺 Homebrew (macOS/Linux)
 
